@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Top Secret Access ✨</title>
-    <!-- Importing cute UI fonts and an elegant cursive handwriting font for the letter -->
+    <!-- Fonts: UI element styling & elegant handwriting for captions -->
     <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&family=Fredoka:wght@400;600&display=swap" rel="stylesheet">
     <style>
         * {
@@ -32,7 +32,28 @@
             100% { background-position: 0% 50%; }
         }
 
-        /* --- PAGE 1: LOGIN CARD STYLES --- */
+        /* --- GLOBAL PARTICLE EFFECT STYLES --- */
+        .click-heart {
+            position: fixed;
+            pointer-events: none;
+            z-index: 9999; /* Forces hearts to float above all structural layers */
+            font-size: 1.6rem;
+            will-change: transform, opacity;
+            animation: flyUpAndFade 1.2s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+        }
+
+        @keyframes flyUpAndFade {
+            0% {
+                transform: translate(-50%, -50%) translateY(0) scale(0.6) rotate(0deg);
+                opacity: 1;
+            }
+            100% {
+                transform: translate(-50%, -50%) translateY(-140px) scale(1.4) rotate(var(--rot));
+                opacity: 0;
+            }
+        }
+
+        /* --- STAGE 1: SYSTEM GATEWAY --- */
         .login-card {
             background: rgba(255, 255, 255, 0.85);
             backdrop-filter: blur(10px);
@@ -53,17 +74,8 @@
             pointer-events: none;
         }
 
-        h1 {
-            color: #ff6b8b;
-            font-size: 1.8rem;
-            margin-bottom: 0.5rem;
-        }
-
-        p {
-            color: #7d7785;
-            font-size: 0.95rem;
-            margin-bottom: 1.5rem;
-        }
+        h1 { color: #ff6b8b; font-size: 1.8rem; margin-bottom: 0.5rem; }
+        p { color: #7d7785; font-size: 0.95rem; margin-bottom: 1.5rem; }
 
         .display-container {
             background: #fff0f3;
@@ -105,29 +117,13 @@
             -webkit-tap-highlight-color: transparent;
         }
 
-        .num-btn:active {
-            transform: scale(0.9);
-            background: #ffb3c1;
-            color: #fff;
-        }
-
-        .num-btn.action-btn {
-            background: #ffe5ec;
-            color: #ff477e;
-            font-size: 1.2rem;
-        }
-
-        .message {
-            margin-top: 1rem;
-            min-height: 24px;
-            font-weight: 600;
-            font-size: 0.9rem;
-        }
+        .num-btn:active { transform: scale(0.9); background: #ffb3c1; color: #fff; }
+        .num-btn.action-btn { background: #ffe5ec; color: #ff477e; font-size: 1.2rem; }
+        .message { margin-top: 1rem; min-height: 24px; font-weight: 600; font-size: 0.9rem; }
         .error { color: #ff4d4d; }
         .success { color: #2ecc71; }
 
-
-        /* --- PAGE 2: ENVELOPE & LETTER STYLES --- */
+        /* --- STAGE 2: ENVELOPE & LETTER --- */
         .stage-two-container {
             position: absolute;
             width: 100%;
@@ -143,13 +139,8 @@
             padding: 20px;
         }
 
-        .stage-two-container.fade-in {
-            opacity: 1;
-            transform: scale(1);
-            pointer-events: auto;
-        }
+        .stage-two-container.fade-in { opacity: 1; transform: scale(1); pointer-events: auto; }
 
-        /* Interactive Envelope wrapper */
         .envelope-wrapper {
             position: relative;
             width: 300px;
@@ -163,47 +154,23 @@
             z-index: 6;
         }
 
-        @keyframes float {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-10px); }
-        }
+        @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
 
-        /* Envelope Top Flap */
         .envelope-wrapper::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            border-left: 150px solid transparent;
-            border-right: 150px solid transparent;
-            border-top: 110px solid #ffccd5;
-            transform-origin: top;
-            transition: transform 0.5s ease, z-index 0.3s;
-            z-index: 8;
+            content: ''; position: absolute; top: 0; left: 0;
+            border-left: 150px solid transparent; border-right: 150px solid transparent;
+            border-top: 110px solid #ffccd5; transform-origin: top;
+            transition: transform 0.5s ease, z-index 0.3s; z-index: 8;
         }
 
-        /* When envelope is opened, flip flap up */
-        .envelope-wrapper.open::before {
-            transform: rotateX(180deg);
-            z-index: 5;
-        }
+        .envelope-wrapper.open::before { transform: rotateX(180deg); z-index: 5; }
 
-        /* Heart seal button */
         .heart-seal {
-            position: absolute;
-            top: 40%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            font-size: 2.5rem;
-            z-index: 9;
-            transition: all 0.3s ease;
+            position: absolute; top: 40%; left: 50%; transform: translate(-50%, -50%);
+            font-size: 2.5rem; z-index: 9; transition: all 0.3s ease;
         }
-        .envelope-wrapper.open .heart-seal {
-            opacity: 0;
-            transform: translate(-50%, -50%) scale(0);
-        }
+        .envelope-wrapper.open .heart-seal { opacity: 0; transform: translate(-50%, -50%) scale(0); }
 
-        /* The actual Letter layout */
         .love-letter-card {
             position: absolute;
             background: #fffdf9;
@@ -219,63 +186,149 @@
             transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
             overflow-y: auto;
             z-index: 15;
-            pointer-events: none; /* Core fix: allows touch elements behind it to fire clicks */
+            pointer-events: none;
         }
 
-        .love-letter-card.reveal {
-            opacity: 1;
-            transform: translateY(0) scale(1);
-            pointer-events: auto; /* Restores scrolling and scrolling text mechanics */
+        .love-letter-card.reveal { opacity: 1; transform: translateY(0) scale(1); pointer-events: auto; }
+        .love-letter-card.fade-out { opacity: 0; transform: scale(0.8); pointer-events: none; }
+
+        .letter-content { font-family: 'Caveat', cursive; font-size: 1.45rem; line-height: 1.8rem; color: #4a3b40; text-align: left; }
+        .letter-content p { font-family: 'Caveat', cursive; color: #4a3b40; margin-bottom: 1.2rem; font-size: 1.45rem; }
+        .letter-content .salutation { font-size: 1.8rem; font-weight: 700; color: #ff477e; margin-bottom: 1.5rem; }
+        .letter-content .closing { margin-top: 2rem; font-weight: 700; color: #ff477e; margin-bottom: 0.2rem; }
+        .letter-content .signature { font-size: 1.6rem; font-weight: 700; color: #7d7785; text-align: right; margin-top: 1rem; }
+
+        .action-transition-btn {
+            background: #ff477e;
+            color: white;
+            border: none;
+            padding: 0.8rem 1.8rem;
+            font-size: 1.1rem;
+            font-weight: 600;
+            border-radius: 20px;
+            cursor: pointer;
+            margin-top: 1.5rem;
+            width: 100%;
+            box-shadow: 0 5px 15px rgba(255, 71, 126, 0.3);
+            transition: all 0.3s ease;
+        }
+        .action-transition-btn:active { transform: scale(0.95); background: #ff6b8b; }
+
+        /* --- STAGE 3: POLAROID MEMORY VAULT --- */
+        .stage-three-container {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            transform: scale(0.9);
+            pointer-events: none;
+            transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+            z-index: 20;
+            padding: 20px;
         }
 
-        /* Typography inside the letter */
-        .letter-content {
-            font-family: 'Caveat', cursive;
-            font-size: 1.45rem;
-            line-height: 1.8rem;
-            color: #4a3b40;
-            text-align: left;
-        }
+        .stage-three-container.fade-in { opacity: 1; transform: scale(1); pointer-events: auto; }
 
-        .letter-content p {
-            font-family: 'Caveat', cursive;
-            color: #4a3b40;
-            margin-bottom: 1.2rem;
-            font-size: 1.45rem;
-        }
-
-        .letter-content .salutation {
-            font-size: 1.8rem;
-            font-weight: 700;
+        .vault-title {
             color: #ff477e;
-            margin-bottom: 1.5rem;
-        }
-
-        .letter-content .closing {
-            margin-top: 2rem;
-            font-weight: 700;
-            color: #ff477e;
-            margin-bottom: 0.2rem;
-        }
-
-        .letter-content .signature {
             font-size: 1.6rem;
-            font-weight: 700;
-            color: #7d7785;
-            text-align: right;
-            margin-top: 1rem;
+            margin-bottom: 1.5rem;
+            text-align: center;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.05);
         }
+
+        .polaroid-slider-box {
+            position: relative;
+            width: 100%;
+            max-width: 330px;
+            height: 410px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .polaroid-card {
+            position: absolute;
+            background: white;
+            padding: 15px 15px 25px 15px;
+            box-shadow: 0 15px 30px rgba(0,0,0,0.12);
+            border-radius: 4px;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            opacity: 0;
+            transform: scale(0.8) rotate(5deg);
+            transition: all 0.5s ease-in-out;
+            pointer-events: none;
+        }
+
+        .polaroid-card.active {
+            opacity: 1;
+            transform: scale(1) rotate(-2deg);
+            pointer-events: auto;
+        }
+
+        .polaroid-img {
+            width: 100%;
+            height: 280px;
+            object-fit: cover;
+            border: 1px solid #f0f0f0;
+            background: #ffe5ec;
+        }
+
+        .polaroid-caption {
+            font-family: 'Caveat', cursive;
+            font-size: 1.4rem;
+            line-height: 1.6rem;
+            color: #4a3b40;
+            text-align: center;
+            margin-top: auto;
+            min-height: 55px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .slider-controls {
+            display: flex;
+            gap: 25px;
+            margin-top: 2rem;
+            align-items: center;
+        }
+
+        .control-btn {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            border: none;
+            background: white;
+            color: #ff477e;
+            font-size: 1.2rem;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 4px 10px rgba(255,107,139,0.2);
+            transition: all 0.2s ease;
+            -webkit-tap-highlight-color: transparent;
+        }
+        .control-btn:active { transform: scale(0.9); background: #ffe5ec; }
+
+        .counter-tracker { color: #7d7785; font-weight: 600; font-size: 1rem; }
     </style>
 </head>
 <body>
 
-    <!-- STAGE 1: LOCKSCREEN CONTROLLER -->
+    <!-- STAGE 1: SYSTEM GATEWAY -->
     <div class="login-card" id="loginCard">
         <h1>Hi Beautiful! ✨</h1>
         <p>Enter the secret code to unlock your surprise:</p>
-        
         <div class="display-container" id="passwordDisplay"></div>
-        
         <div class="numpad">
             <button class="num-btn" onclick="pressKey('1')">1</button>
             <button class="num-btn" onclick="pressKey('2')">2</button>
@@ -290,11 +343,10 @@
             <button class="num-btn" onclick="pressKey('0')">0</button>
             <button class="num-btn action-btn" onclick="checkPassword()">Go</button>
         </div>
-
         <div class="message" id="msgDisplay"></div>
     </div>
 
-    <!-- STAGE 2: INTERACTIVE ENVELOPE & LETTER MATRIX -->
+    <!-- STAGE 2: DIGITAL ENVELOPE PROTOCOL -->
     <div class="stage-two-container" id="stageTwo">
         <div class="envelope-wrapper" id="envelope" onclick="openLetter()">
             <div class="heart-seal">❤️</div>
@@ -310,7 +362,39 @@
                 <p class="closing">Happy Birthday, Jhansi.</p>
                 <p>I’m yours in a way I can’t undo.</p>
                 <p class="signature">— By Namann Bissoyi</p>
+                
+                <button class="action-transition-btn" onclick="deployVault()">Our Memories ➔</button>
             </div>
+        </div>
+    </div>
+
+    <!-- STAGE 3: INTERACTIVE MEMORY VAULT -->
+    <div class="stage-three-container" id="stageThree">
+        <h2 class="vault-title">Some of My Favorite Moments 💖</h2>
+        
+        <div class="polaroid-slider-box">
+            <div class="polaroid-card active">
+                <img src="photo1.jpg" alt="Memory 1" class="polaroid-img">
+                <div class="polaroid-caption">My favorite view in the entire world. Yes, even when you're giving me 'the look.' 😂</div>
+            </div>
+            <div class="polaroid-card">
+                <img src="photo2.jpg" alt="Memory 2" class="polaroid-img">
+                <div class="polaroid-caption">Still don't know how I convinced the most beautiful girl in the room to steal my heart, but I'm not giving it back.</div>
+            </div>
+            <div class="polaroid-card">
+                <img src="photo3.jpg" alt="Memory 3" class="polaroid-img">
+                <div class="polaroid-caption">Anywhere in the world is my favorite place, as long as your hand is in mine.</div>
+            </div>
+            <div class="polaroid-card">
+                <img src="photo4.jpg" alt="Memory 4" class="polaroid-img">
+                <div class="polaroid-caption">To the one who makes our home feel like heaven. Happy Birthday, my love.</div>
+            </div>
+        </div>
+
+        <div class="slider-controls">
+            <button class="control-btn" onclick="moveSlide(-1)">◀</button>
+            <span class="counter-tracker" id="slideTracker">1 / 4</span>
+            <button class="control-btn" onclick="moveSlide(1)">▶</button>
         </div>
     </div>
 
@@ -318,6 +402,7 @@
         const CORRECT_PASSWORD = "1606";
         let currentInput = "";
         let isTransitioning = false;
+        let currentSlideIndex = 0;
 
         const displayEl = document.getElementById("passwordDisplay");
         const msgEl = document.getElementById("msgDisplay");
@@ -325,63 +410,86 @@
         const stageTwo = document.getElementById("stageTwo");
         const envelope = document.getElementById("envelope");
         const loveLetter = document.getElementById("loveLetter");
+        const stageThree = document.getElementById("stageThree");
+        const cards = document.querySelectorAll(".polaroid-card");
+        const tracker = document.getElementById("slideTracker");
 
-        function updateDisplay() {
-            displayEl.textContent = "•".repeat(currentInput.length);
-        }
+        /* --- GLOBAL TOUCH/CLICK HEART ENGINE --- */
+        const heartPool = ['❤️', '💖', '💕', '✨'];
+        document.addEventListener('click', function(e) {
+            const heart = document.createElement('div');
+            heart.className = 'click-heart';
+            
+            // Randomize heart aesthetic profile
+            heart.textContent = heartPool[Math.floor(Math.random() * heartPool.length)];
+            
+            // Randomize rotational variance vector between -45 and 45 degrees
+            const randomRotation = Math.floor(Math.random() * 90) - 45;
+            heart.style.setProperty('--rot', `${randomRotation}deg`);
+            
+            // Target coordinates
+            heart.style.left = `${e.clientX}px`;
+            heart.style.top = `${e.clientY}px`;
+            
+            document.body.appendChild(heart);
+            
+            // Automatically depopulate heart elements from DOM once animation wraps up
+            setTimeout(() => { heart.remove(); }, 1200);
+        });
+
+        function updateDisplay() { displayEl.textContent = "•".repeat(currentInput.length); }
 
         function pressKey(num) {
             if (isTransitioning) return;
-            
-            if (currentInput.length < 4) {
-                currentInput += num;
-                msgEl.textContent = ""; 
-                updateDisplay();
-            }
-            
-            if (currentInput.length === 4) {
-                checkPassword();
-            }
+            if (currentInput.length < 4) { currentInput += num; msgEl.textContent = ""; updateDisplay(); }
+            if (currentInput.length === 4) { checkPassword(); }
         }
 
         function clearDisplay() {
             if (isTransitioning) return;
-            currentInput = "";
-            msgEl.textContent = "";
-            updateDisplay();
+            currentInput = ""; msgEl.textContent = ""; updateDisplay();
         }
 
         function checkPassword() {
             if (isTransitioning) return;
-
             if (currentInput === CORRECT_PASSWORD) {
                 isTransitioning = true;
                 msgEl.className = "message success";
                 msgEl.textContent = "Access Granted! 💖";
-                
                 loginCard.classList.add("fade-out");
-                
                 setTimeout(() => {
                     loginCard.style.display = "none";
                     stageTwo.classList.add("fade-in");
                 }, 400);
-                
             } else {
                 msgEl.className = "message error";
                 msgEl.textContent = "Incorrect code, try again princess! 💕";
-                currentInput = "";
-                updateDisplay();
+                currentInput = ""; updateDisplay();
             }
         }
 
         function openLetter() {
             envelope.classList.add("open");
+            setTimeout(() => { envelope.style.opacity = "0"; loveLetter.classList.add("reveal"); }, 500);
+        }
+
+        function deployVault() {
+            loveLetter.classList.add("fade-out");
             setTimeout(() => {
-                envelope.style.opacity = "0";
-                loveLetter.classList.add("reveal");
-            }, 500);
+                stageTwo.classList.remove("fade-in");
+                stageTwo.style.display = "none";
+                stageThree.classList.add("fade-in");
+            }, 600);
+        }
+
+        function moveSlide(direction) {
+            cards[currentSlideIndex].classList.remove("active");
+            currentSlideIndex += direction;
+            if (currentSlideIndex >= cards.length) { currentSlideIndex = 0; }
+            if (currentSlideIndex < 0) { currentSlideIndex = cards.length - 1; }
+            cards[currentSlideIndex].classList.add("active");
+            tracker.textContent = `${currentSlideIndex + 1} / ${cards.length}`;
         }
     </script>
 </body>
 </html>
-
