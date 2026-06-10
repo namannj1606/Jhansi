@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Top Secret Access ✨</title>
     <!-- Fonts: UI element styling & elegant handwriting for captions -->
-    <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&family=Fredoka:wght@400;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Caveat:wght=600;700&family=Fredoka:wght=400;600&display=swap" rel="stylesheet">
     <style>
         * {
             box-sizing: border-box;
@@ -32,11 +32,16 @@
             100% { background-position: 0% 50%; }
         }
 
+        /* --- GLOBAL SAFETY MECHANISM --- */
+        .hidden {
+            display: none !important;
+        }
+
         /* --- GLOBAL PARTICLE EFFECT STYLES --- */
         .click-heart {
             position: fixed;
-            pointer-events: none;
-            z-index: 9999; /* Forces hearts to float above all structural layers */
+            pointer-events: none !important;
+            z-index: 9999 !important;
             font-size: 1.6rem;
             will-change: transform, opacity;
             animation: flyUpAndFade 1.2s cubic-bezier(0.25, 1, 0.5, 1) forwards;
@@ -123,8 +128,8 @@
         .error { color: #ff4d4d; }
         .success { color: #2ecc71; }
 
-        /* --- STAGE 2: ENVELOPE & LETTER --- */
-        .stage-two-container {
+        /* --- BASE STAGE CONTAINERS --- */
+        .stage-container {
             position: absolute;
             width: 100%;
             height: 100%;
@@ -133,14 +138,17 @@
             align-items: center;
             opacity: 0;
             transform: scale(0.9);
-            pointer-events: none;
             transition: opacity 0.5s ease, transform 0.5s ease;
             z-index: 5;
             padding: 20px;
         }
 
-        .stage-two-container.fade-in { opacity: 1; transform: scale(1); pointer-events: auto; }
+        .stage-container.fade-in {
+            opacity: 1;
+            transform: scale(1);
+        }
 
+        /* --- STAGE 2: ENVELOPE & LETTER --- */
         .envelope-wrapper {
             position: relative;
             width: 300px;
@@ -186,11 +194,11 @@
             transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
             overflow-y: auto;
             z-index: 15;
-            pointer-events: none;
+            display: none;
         }
 
-        .love-letter-card.reveal { opacity: 1; transform: translateY(0) scale(1); pointer-events: auto; }
-        .love-letter-card.fade-out { opacity: 0; transform: scale(0.8); pointer-events: none; }
+        .love-letter-card.reveal { display: block; opacity: 1; transform: translateY(0) scale(1); }
+        .love-letter-card.fade-out { opacity: 0; transform: scale(0.8); }
 
         .letter-content { font-family: 'Caveat', cursive; font-size: 1.45rem; line-height: 1.8rem; color: #4a3b40; text-align: left; }
         .letter-content p { font-family: 'Caveat', cursive; color: #4a3b40; margin-bottom: 1.2rem; font-size: 1.45rem; }
@@ -215,23 +223,14 @@
         .action-transition-btn:active { transform: scale(0.95); background: #ff6b8b; }
 
         /* --- STAGE 3: POLAROID MEMORY VAULT --- */
-        .stage-three-container {
-            position: absolute;
-            width: 100%;
-            height: 100%;
+        .stage-three-layout {
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            opacity: 0;
-            transform: scale(0.9);
-            pointer-events: none;
-            transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
-            z-index: 20;
-            padding: 20px;
+            width: 100%;
+            height: 100%;
         }
-
-        .stage-three-container.fade-in { opacity: 1; transform: scale(1); pointer-events: auto; }
 
         .vault-title {
             color: #ff477e;
@@ -347,7 +346,7 @@
     </div>
 
     <!-- STAGE 2: DIGITAL ENVELOPE PROTOCOL -->
-    <div class="stage-two-container" id="stageTwo">
+    <div class="stage-container hidden" id="stageTwo">
         <div class="envelope-wrapper" id="envelope" onclick="openLetter()">
             <div class="heart-seal">❤️</div>
         </div>
@@ -369,32 +368,34 @@
     </div>
 
     <!-- STAGE 3: INTERACTIVE MEMORY VAULT -->
-    <div class="stage-three-container" id="stageThree">
-        <h2 class="vault-title">Some of My Favorite Moments 💖</h2>
-        
-        <div class="polaroid-slider-box">
-            <div class="polaroid-card active">
-                <img src="photo1.jpg" alt="Memory 1" class="polaroid-img">
-                <div class="polaroid-caption">My favorite view in the entire world. Yes, even when you're giving me 'the look.' 😂</div>
+    <div class="stage-container hidden" id="stageThree">
+        <div class="stage-three-layout">
+            <h2 class="vault-title">Some of My Favorite Moments 💖</h2>
+            
+            <div class="polaroid-slider-box">
+                <div class="polaroid-card active">
+                    <img src="photo1.jpg" alt="Memory 1" class="polaroid-img">
+                    <div class="polaroid-caption">My favorite view in the entire world. Yes, even when you're giving me 'the look.' 😂</div>
+                </div>
+                <div class="polaroid-card">
+                    <img src="photo2.jpg" alt="Memory 2" class="polaroid-img">
+                    <div class="polaroid-caption">Still don't know how I convinced the most beautiful girl in the room to steal my heart, but I'm not giving it back.</div>
+                </div>
+                <div class="polaroid-card">
+                    <img src="photo3.jpg" alt="Memory 3" class="polaroid-img">
+                    <div class="polaroid-caption">Anywhere in the world is my favorite place, as long as your hand is in mine.</div>
+                </div>
+                <div class="polaroid-card">
+                    <img src="photo4.jpg" alt="Memory 4" class="polaroid-img">
+                    <div class="polaroid-caption">To the one who makes our home feel like heaven. Happy Birthday, my love.</div>
+                </div>
             </div>
-            <div class="polaroid-card">
-                <img src="photo2.jpg" alt="Memory 2" class="polaroid-img">
-                <div class="polaroid-caption">Still don't know how I convinced the most beautiful girl in the room to steal my heart, but I'm not giving it back.</div>
-            </div>
-            <div class="polaroid-card">
-                <img src="photo3.jpg" alt="Memory 3" class="polaroid-img">
-                <div class="polaroid-caption">Anywhere in the world is my favorite place, as long as your hand is in mine.</div>
-            </div>
-            <div class="polaroid-card">
-                <img src="photo4.jpg" alt="Memory 4" class="polaroid-img">
-                <div class="polaroid-caption">To the one who makes our home feel like heaven. Happy Birthday, my love.</div>
-            </div>
-        </div>
 
-        <div class="slider-controls">
-            <button class="control-btn" onclick="moveSlide(-1)">◀</button>
-            <span class="counter-tracker" id="slideTracker">1 / 4</span>
-            <button class="control-btn" onclick="moveSlide(1)">▶</button>
+            <div class="slider-controls">
+                <button class="control-btn" onclick="moveSlide(-1)">◀</button>
+                <span class="counter-tracker" id="slideTracker">1 / 4</span>
+                <button class="control-btn" onclick="moveSlide(1)">▶</button>
+            </div>
         </div>
     </div>
 
@@ -415,25 +416,19 @@
         const tracker = document.getElementById("slideTracker");
 
         /* --- GLOBAL TOUCH/CLICK HEART ENGINE --- */
-        const heartPool = ['❤️', '💖', '💕', '✨'];
+        const heartPool = ['❤️', '💖', '💕']; // Sparkle emoji officially purged
         document.addEventListener('click', function(e) {
             const heart = document.createElement('div');
             heart.className = 'click-heart';
-            
-            // Randomize heart aesthetic profile
             heart.textContent = heartPool[Math.floor(Math.random() * heartPool.length)];
             
-            // Randomize rotational variance vector between -45 and 45 degrees
             const randomRotation = Math.floor(Math.random() * 90) - 45;
             heart.style.setProperty('--rot', `${randomRotation}deg`);
             
-            // Target coordinates
             heart.style.left = `${e.clientX}px`;
             heart.style.top = `${e.clientY}px`;
             
             document.body.appendChild(heart);
-            
-            // Automatically depopulate heart elements from DOM once animation wraps up
             setTimeout(() => { heart.remove(); }, 1200);
         });
 
@@ -457,9 +452,11 @@
                 msgEl.className = "message success";
                 msgEl.textContent = "Access Granted! 💖";
                 loginCard.classList.add("fade-out");
+                
                 setTimeout(() => {
-                    loginCard.style.display = "none";
-                    stageTwo.classList.add("fade-in");
+                    loginCard.classList.add("hidden");
+                    stageTwo.classList.remove("hidden");
+                    setTimeout(() => { stageTwo.classList.add("fade-in"); }, 50);
                 }, 400);
             } else {
                 msgEl.className = "message error";
@@ -470,16 +467,21 @@
 
         function openLetter() {
             envelope.classList.add("open");
-            setTimeout(() => { envelope.style.opacity = "0"; loveLetter.classList.add("reveal"); }, 500);
+            setTimeout(() => { 
+                envelope.classList.add("hidden"); 
+                loveLetter.classList.add("reveal"); 
+            }, 500);
         }
 
         function deployVault() {
             loveLetter.classList.add("fade-out");
+            stageTwo.classList.remove("fade-in");
+            
             setTimeout(() => {
-                stageTwo.classList.remove("fade-in");
-                stageTwo.style.display = "none";
-                stageThree.classList.add("fade-in");
-            }, 600);
+                stageTwo.classList.add("hidden");
+                stageThree.classList.remove("hidden");
+                setTimeout(() => { stageThree.classList.add("fade-in"); }, 50);
+            }, 500);
         }
 
         function moveSlide(direction) {
@@ -493,3 +495,4 @@
     </script>
 </body>
 </html>
+
