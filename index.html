@@ -44,7 +44,7 @@
             width: 100%;
             max-width: 380px;
             z-index: 10;
-            transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: opacity 0.4s ease, transform 0.4s ease;
         }
 
         .login-card.fade-out {
@@ -138,7 +138,7 @@
             opacity: 0;
             transform: scale(0.9);
             pointer-events: none;
-            transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: opacity 0.5s ease, transform 0.5s ease;
             z-index: 5;
             padding: 20px;
         }
@@ -177,7 +177,7 @@
             border-right: 150px solid transparent;
             border-top: 110px solid #ffccd5;
             transform-origin: top;
-            transition: transform 0.5s ease z-index 0.3s;
+            transition: transform 0.5s ease, z-index 0.3s;
             z-index: 3;
         }
 
@@ -206,16 +206,16 @@
         .love-letter-card {
             position: absolute;
             background: #fffdf9;
-            width: 90%;
+            width: 95%;
             max-width: 400px;
-            max-height: 80vh;
+            max-height: 85vh;
             border-radius: 25px;
             padding: 2.5rem 2rem;
             box-shadow: 0 20px 50px rgba(0, 0, 0, 0.15);
             border: 1px solid #ffe5ec;
             opacity: 0;
             transform: translateY(100px) scale(0.8);
-            transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
             overflow-y: auto;
             z-index: 15;
         }
@@ -314,6 +314,7 @@
     <script>
         const CORRECT_PASSWORD = "1606";
         let currentInput = "";
+        let isTransitioning = false;
 
         const displayEl = document.getElementById("passwordDisplay");
         const msgEl = document.getElementById("msgDisplay");
@@ -327,6 +328,8 @@
         }
 
         function pressKey(num) {
+            if (isTransitioning) return;
+            
             if (currentInput.length < 4) {
                 currentInput += num;
                 msgEl.textContent = ""; 
@@ -334,31 +337,33 @@
             }
             
             if (currentInput.length === 4) {
-                setTimeout(checkPassword, 300);
+                checkPassword();
             }
         }
 
         function clearDisplay() {
+            if (isTransitioning) return;
             currentInput = "";
             msgEl.textContent = "";
             updateDisplay();
         }
 
         function checkPassword() {
+            if (isTransitioning) return;
+
             if (currentInput === CORRECT_PASSWORD) {
+                isTransitioning = true;
                 msgEl.className = "message success";
-                msgEl.textContent = "Access Granted! Loading your surprise...💖";
+                msgEl.textContent = "Access Granted! 💖";
                 
-                // Initialize transition protocols to Stage 2
+                // Swift card fade-out
+                loginCard.classList.add("fade-out");
+                
+                // Deploy Envelope Stage immediately after fade animation finishes
                 setTimeout(() => {
-                    loginCard.classList.add("fade-out");
-                    
-                    setTimeout(() => {
-                        loginCard.style.display = "none";
-                        stageTwo.classList.add("fade-in");
-                    }, 600);
-                    
-                }, 1000);
+                    loginCard.style.display = "none";
+                    stageTwo.classList.add("fade-in");
+                }, 400);
                 
             } else {
                 msgEl.className = "message error";
@@ -369,14 +374,11 @@
         }
 
         function openLetter() {
-            // Trigger envelope flap animation
             envelope.classList.add("open");
-            
-            // Elegantly lift the letter out of the structural envelope matrix
             setTimeout(() => {
                 envelope.style.opacity = "0";
                 loveLetter.classList.add("reveal");
-            }, 600);
+            }, 500);
         }
     </script>
 </body>
