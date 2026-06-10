@@ -17,13 +17,14 @@
             background: linear-gradient(135deg, #ffe5ec, #ffc2d1, #f0e6ff);
             background-size: 400% 400%;
             animation: gradientBG 15s ease infinite;
-            height: 100vh;
+            min-height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
-            overflow: hidden;
-            position: relative;
+            overflow-x: hidden;
             font-family: 'Fredoka', sans-serif;
+            position: relative;
+            padding: 20px;
         }
 
         @keyframes gradientBG {
@@ -32,38 +33,39 @@
             100% { background-position: 0% 50%; }
         }
 
-        /* --- FOOLPROOF PAGE SYSTEM --- */
-        .page {
-            display: none; /* Completely disables interaction when inactive */
-            width: 100%;
-            height: 100%;
-            justify-content: center;
-            align-items: center;
-            padding: 20px;
-            position: absolute;
-        }
-
-        .page.active {
-            display: flex; /* Activates strictly one page layout at a time */
-            animation: pageFadeIn 0.4s ease forwards;
-        }
-
-        @keyframes pageFadeIn {
-            from { opacity: 0; transform: scale(0.95); }
-            to { opacity: 1; transform: scale(1); }
-        }
-
-        /* --- GLOBAL PARTICLES --- */
-        .click-heart {
+        /* --- IMMUNE HEART PARTICLE FRAME --- */
+        #global-heart-container {
             position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
             pointer-events: none;
-            z-index: 10000;
+            z-index: 99999;
+        }
+
+        .click-heart {
+            position: absolute;
+            pointer-events: none;
             font-size: 1.6rem;
             transform: translate(-50%, -50%);
             will-change: transform, opacity;
         }
 
-        /* --- GENERAL CARD STRUCTURE --- */
+        /* --- CLEAN SINGLE PAGE FLOW --- */
+        .page {
+            display: none; /* Active page will override this */
+            width: 100%;
+            max-width: 380px;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .page.active {
+            display: flex;
+        }
+
+        /* --- BASE CARD DESIGN --- */
         .cute-card {
             background: rgba(255, 255, 255, 0.85);
             backdrop-filter: blur(10px);
@@ -73,13 +75,12 @@
             border: 4px solid #fff;
             text-align: center;
             width: 100%;
-            max-width: 380px;
         }
 
         h1, h2 { color: #ff6b8b; font-size: 1.8rem; margin-bottom: 0.5rem; }
         p { color: #7d7785; font-size: 0.95rem; margin-bottom: 1.5rem; }
 
-        /* --- PAGE 1: PASSCODE LAYER --- */
+        /* --- PASSCODE INTERFACE --- */
         .display-container {
             background: #fff0f3;
             border: 2px dashed #ffb3c1;
@@ -108,7 +109,7 @@
         .error { color: #ff4d4d; }
         .success { color: #2ecc71; }
 
-        /* --- BUTTON MATRIX --- */
+        /* --- GLOBAL TRANSITION BUTTONS --- */
         .action-transition-btn {
             background: #ff477e; color: white; border: none; padding: 0.8rem 1.8rem;
             font-size: 1.1rem; font-weight: 600; border-radius: 20px; cursor: pointer;
@@ -117,11 +118,9 @@
         }
         .action-transition-btn:active { transform: scale(0.95); background: #ff6b8b; }
 
-        /* --- PAGE 2: CELEBRATION CARD & CSS CAT --- */
-        .celebration-card h2 { color: #ff477e; font-size: 2rem; margin-bottom: 1.5rem; }
-
+        /* --- CSS ANIMATED CAT & CAKE --- */
         .cat-animation-wrapper {
-            position: relative; width: 200px; height: 180px; margin-bottom: 1rem;
+            position: relative; width: 200px; height: 180px; margin: 0 auto 1rem auto;
             animation: floatCat 3s ease-in-out infinite;
         }
         @keyframes floatCat { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
@@ -153,12 +152,13 @@
         .cat-paw { position: absolute; bottom: 30px; width: 22px; height: 22px; background: #f1f2f6; border-radius: 50%; z-index: 4; }
         .cat-paw.left { left: 42px; } .cat-paw.right { right: 42px; }
 
-        /* --- PAGE 3: DIGITAL ENVELOPE & LETTER --- */
+        /* --- PAGE 3: ENVELOPE MECHANICS --- */
         .envelope-wrapper {
             width: 300px; height: 200px; background-color: #ffb3c1; border-radius: 0 0 15px 15px;
             box-shadow: 0 15px 35px rgba(255, 107, 139, 0.3); cursor: pointer;
-            position: relative; animation: float 3s ease-in-out infinite;
+            position: relative; animation: float 3s ease-in-out infinite; margin: 0 auto;
         }
+        @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
         .envelope-wrapper::before {
             content: ''; position: absolute; top: 0; left: 0;
             border-left: 150px solid transparent; border-right: 150px solid transparent;
@@ -169,7 +169,7 @@
         .envelope-wrapper.open .envelope-heart { opacity: 0; transform: translate(-50%, -50%) scale(0); }
 
         .love-letter-card {
-            background: #fffdf9; width: 100%; max-width: 400px; max-height: 85vh;
+            background: #fffdf9; width: 100%; max-height: 85vh;
             border-radius: 25px; padding: 2.5rem 2rem; box-shadow: 0 20px 50px rgba(0, 0, 0, 0.15);
             border: 1px solid #ffe5ec; overflow-y: auto; display: none;
         }
@@ -180,9 +180,9 @@
         .letter-content .closing { margin-top: 2rem; font-weight: 700; color: #ff477e; margin-bottom: 0.2rem; }
         .letter-content .signature { font-size: 1.6rem; font-weight: 700; color: #7d7785; text-align: right; margin-top: 1rem; }
 
-        /* --- PAGE 4: POLAROID MEMORY VAULT --- */
-        .vault-title { color: #ff477e; font-size: 1.6rem; margin-bottom: 1.5rem; text-shadow: 0 2px 4px rgba(0,0,0,0.05); }
-        .polaroid-slider-box { position: relative; width: 100%; max-width: 320px; height: 400px; display: flex; justify-content: center; align-items: center; }
+        /* --- PAGE 4: PHOTO GALLERY --- */
+        .vault-title { color: #ff477e; font-size: 1.6rem; margin-bottom: 1.5rem; text-shadow: 0 2px 4px rgba(0,0,0,0.05); text-align: center;}
+        .polaroid-slider-box { position: relative; width: 100%; max-width: 320px; height: 400px; margin: 0 auto; display: flex; justify-content: center; align-items: center; }
         
         .polaroid-card {
             position: absolute; background: white; padding: 15px 15px 25px 15px;
@@ -194,7 +194,7 @@
         .polaroid-img { width: 100%; height: 270px; object-fit: cover; border: 1px solid #f0f0f0; background: #ffe5ec; }
         .polaroid-caption { font-family: 'Caveat', cursive; font-size: 1.35rem; line-height: 1.5rem; color: #4a3b40; text-align: center; margin-top: auto; min-height: 55px; display: flex; align-items: center; justify-content: center; }
 
-        .slider-controls { display: flex; gap: 25px; margin-top: 1.5rem; align-items: center; }
+        .slider-controls { display: flex; gap: 25px; margin-top: 1.5rem; align-items: center; justify-content: center; }
         .control-btn {
             width: 50px; height: 50px; border-radius: 50%; border: none; background: white; color: #ff477e;
             font-size: 1.2rem; cursor: pointer; display: flex; justify-content: center; align-items: center;
@@ -204,6 +204,8 @@
     </style>
 </head>
 <body>
+
+    <div id="global-heart-container"></div>
 
     <div class="page active" id="pageLock">
         <div class="cute-card">
@@ -252,27 +254,29 @@
     </div>
 
     <div class="page" id="pageEnvelope">
-        <div class="envelope-wrapper" id="envelope" onclick="openEnvelope()">
-            <div class="envelope-heart">❤️</div>
-        </div>
+        <div style="width: 100%;">
+            <div class="envelope-wrapper" id="envelope" onclick="openEnvelope()">
+                <div class="envelope-heart">❤️</div>
+            </div>
 
-        <div class="love-letter-card" id="loveLetter">
-            <div class="letter-content">
-                <p class="salutation">Happy Birthday Jhansi,</p>
-                <p>I don’t think I ever loved anything as deeply and uncontrollably as I love you.</p>
-                <p>It’s not gentle or simple anymore — it’s something that stays with me all the time. You’re in my thoughts when I’m quiet, in my breath when I miss you, and in every part of me that has learned what attachment really feels like.</p>
-                <p>There’s a pull toward you that I can’t explain. Not just love… something stronger, something that feels like it owns me just as much as I belong to it.</p>
-                <p>Today, I just want you to feel special, wanted, and completely mine in the way two hearts belong to each other when they’ve chosen each other fully.</p>
-                <p class="closing">Happy Birthday, Jhansi.</p>
-                <p>I’m yours in a way I can’t undo.</p>
-                <p class="signature">— By Namann Bissoyi</p>
-                <button class="action-transition-btn" onclick="switchPage('pageVault')">Our Memories ➔</button>
+            <div class="love-letter-card" id="loveLetter">
+                <div class="letter-content">
+                    <p class="salutation">Happy Birthday Jhansi,</p>
+                    <p>I don’t think I ever loved anything as deeply and uncontrollably as I love you.</p>
+                    <p>It’s not gentle or simple anymore — it’s something that stays with me all the time. You’re in my thoughts when I’m quiet, in my breath when I miss you, and in every part of me that has learned what attachment really feels like.</p>
+                    <p>There’s a pull toward you that I can’t explain. Not just love… something stronger, something that feels like it owns me just as much as I belong to it.</p>
+                    <p>Today, I just want you to feel special, wanted, and completely mine in the way two hearts belong to each other when they’ve chosen each other fully.</p>
+                    <p class="closing">Happy Birthday, Jhansi.</p>
+                    <p>I’m yours in a way I can’t undo.</p>
+                    <p class="signature">— By Namann Bissoyi</p>
+                    <button class="action-transition-btn" onclick="switchPage('pageVault')">Our Memories ➔</button>
+                </div>
             </div>
         </div>
     </div>
 
     <div class="page" id="pageVault">
-        <div style="display: flex; flex-direction: column; align-items: center;">
+        <div style="width: 100%;">
             <h2 class="vault-title">Some of My Favorite Moments 💖</h2>
             <div class="polaroid-slider-box">
                 <div class="polaroid-card active">
@@ -310,35 +314,34 @@
         const cards = document.querySelectorAll(".polaroid-card");
         const tracker = document.getElementById("slideTracker");
 
-        /* --- NATIVE ACCELERATED HEART SPARK PROTOCOL --- */
+        /* --- IMMUNE FLOATING HEART ENGINE --- */
         const heartPool = ['❤️', '💖', '💕'];
-        document.addEventListener('click', function(e) {
-            const x = e.clientX;
-            const y = e.clientY;
-            if (!x && !y) return; // Ignores empty triggers
+        document.addEventListener('pointerdown', function(e) {
+            const container = document.getElementById('global-heart-container');
+            if (!container) return;
 
             const heart = document.createElement('div');
             heart.className = 'click-heart';
             heart.textContent = heartPool[Math.floor(Math.random() * heartPool.length)];
-            heart.style.left = x + 'px';
-            heart.style.top = y + 'px';
+            heart.style.left = e.clientX + 'px';
+            heart.style.top = e.clientY + 'px';
             
             const randomRot = Math.floor(Math.random() * 80) - 40;
             heart.style.transform = `translate(-50%, -50%) scale(0.6) rotate(${randomRot}deg)`;
             
-            document.body.appendChild(heart);
+            container.appendChild(heart);
 
-            // High performance CSS injection via JavaScript native runtime
+            // Asynchronous rendering path ensures zero click cancellation on buttons
             requestAnimationFrame(() => {
                 heart.style.transition = 'transform 1.2s cubic-bezier(0.25, 1, 0.5, 1), opacity 1.2s ease';
                 heart.style.transform = `translate(-50%, -50%) translateY(-150px) scale(1.4) rotate(${randomRot + 20}deg)`;
                 heart.style.opacity = '0';
             });
 
-            setTimeout(() => { heart.remove(); }, 1200);
+            setTimeout(() => { heart.remove(); }, 1250);
         });
 
-        /* --- STATE SHIFT ENGINE --- */
+        /* --- CLEAN TRANSITION CONTROLLER --- */
         function switchPage(toPageId) {
             document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
             const target = document.getElementById(toPageId);
@@ -383,6 +386,4 @@
         }
 
         function moveSlide(direction) {
-            cards[currentSlideIndex].classList.remove("active");
-            currentSlideIndex += direction;
-       
+            cards[currentSlideIndex].cl
