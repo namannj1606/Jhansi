@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Top Secret Access ✨</title>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Fredoka', sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #ffe5ec, #ffc2d1, #f0e6ff);
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            position: relative;
+        }
+
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* Decorative Floating Elements */
+        .hearts {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        /* Main Cute Container */
+        .login-card {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(10px);
+            padding: 2.5rem 2rem;
+            border-radius: 30px;
+            box-shadow: 0 10px 30px rgba(255, 154, 178, 0.3);
+            border: 4px solid #fff;
+            text-align: center;
+            width: 100%;
+            max-width: 380px;
+            z-index: 2;
+            transform: scale(1);
+            transition: transform 0.3s ease;
+        }
+
+        h1 {
+            color: #ff6b8b;
+            font-size: 1.8rem;
+            margin-bottom: 0.5rem;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.05);
+        }
+
+        p {
+            color: #7d7785;
+            font-size: 0.95rem;
+            margin-bottom: 1.5rem;
+        }
+
+        /* Password Display dots */
+        .display-container {
+            background: #fff0f3;
+            border: 2px dashed #ffb3c1;
+            border-radius: 20px;
+            padding: 0.8rem;
+            font-size: 2rem;
+            letter-spacing: 0.5rem;
+            color: #ff477e;
+            min-height: 60px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            box-shadow: inset 0 2px 5px rgba(0,0,0,0.05);
+        }
+
+        /* Numpad Grid Layout */
+        .numpad {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+            justify-items: center;
+        }
+
+        .num-btn {
+            width: 65px;
+            height: 65px;
+            border-radius: 50%;
+            border: none;
+            background: #fff;
+            color: #ff6b8b;
+            font-size: 1.5rem;
+            font-weight: 600;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(255, 182, 193, 0.4);
+            transition: all 0.2s ease;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .num-btn:active {
+            transform: scale(0.9);
+            background: #ffb3c1;
+            color: #fff;
+        }
+
+        .num-btn.action-btn {
+            background: #ffe5ec;
+            color: #ff477e;
+            font-size: 1.2rem;
+        }
+
+        .num-btn.action-btn:active {
+            background: #ff477e;
+            color: #fff;
+        }
+
+        /* Error Text */
+        .message {
+            margin-top: 1rem;
+            min-height: 24px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: color 0.3s ease;
+        }
+
+        .error { color: #ff4d4d; }
+        .success { color: #2ecc71; }
+    </style>
+</head>
+<body>
+
+    <div class="login-card">
+        <h1>Hi Beautiful! ✨</h1>
+        <p>Enter the secret code to unlock your surprise:</p>
+        
+        <div class="display-container" id="passwordDisplay"></div>
+        
+        <div class="numpad">
+            <button class="num-btn" onclick="pressKey('1')">1</button>
+            <button class="num-btn" onclick="pressKey('2')">2</button>
+            <button class="num-btn" onclick="pressKey('3')">3</button>
+            <button class="num-btn" onclick="pressKey('4')">4</button>
+            <button class="num-btn" onclick="pressKey('5')">5</button>
+            <button class="num-btn" onclick="pressKey('6')">6</button>
+            <button class="num-btn" onclick="pressKey('7')">7</button>
+            <button class="num-btn" onclick="pressKey('8')">8</button>
+            <button class="num-btn" onclick="pressKey('9')">9</button>
+            <button class="num-btn action-btn" onclick="clearDisplay()">Clear</button>
+            <button class="num-btn" onclick="pressKey('0')">0</button>
+            <button class="num-btn action-btn" onclick="checkPassword()">Go</button>
+        </div>
+
+        <div class="message" id="msgDisplay"></div>
+    </div>
+
+    <script>
+        const CORRECT_PASSWORD = "1606";
+        let currentInput = "";
+
+        const displayEl = document.getElementById("passwordDisplay");
+        const msgEl = document.getElementById("msgDisplay");
+
+        function updateDisplay() {
+            // Converts numbers to cute bullet points for security, or stays empty
+            displayEl.textContent = "•".repeat(currentInput.length);
+        }
+
+        function pressKey(num) {
+            if (currentInput.length < 4) {
+                currentInput += num;
+                msgEl.textContent = ""; // Clear any error text
+                updateDisplay();
+            }
+            
+            // Auto-check if it hits 4 digits
+            if (currentInput.length === 4) {
+                setTimeout(checkPassword, 300);
+            }
+        }
+
+        function clearDisplay() {
+            currentInput = "";
+            msgEl.textContent = "";
+            updateDisplay();
+        }
+
+        function checkPassword() {
+            if (currentInput === CORRECT_PASSWORD) {
+                msgEl.className = "message success";
+                msgEl.textContent = "Access Granted! Loading your surprise...💖";
+                
+                // Placeholder action for Phase 2
+                setTimeout(() => {
+                    alert("System Notice: Password correct. Ready for Page 2 deployment, Boss.");
+                }, 500);
+                
+            } else {
+                msgEl.className = "message error";
+                msgEl.textContent = "Incorrect code, try again princess! 💕";
+                currentInput = "";
+                updateDisplay();
+            }
+        }
+    </script>
+</body>
+</html>
+
