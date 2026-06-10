@@ -143,7 +143,7 @@
         .error { color: #ff4d4d; }
         .success { color: #2ecc71; }
 
-        /* --- NEW STAGE 2: BIRTHDAY CELEBRATION CARD --- */
+        /* --- STAGE 2: BIRTHDAY CELEBRATION CARD --- */
         .celebration-card {
             background: rgba(255, 255, 255, 0.85);
             backdrop-filter: blur(10px);
@@ -185,7 +185,6 @@
             50% { transform: translateY(-8px); }
         }
 
-        /* Cat Body */
         .cat-head {
             position: absolute;
             bottom: 40px; left: 40px;
@@ -195,7 +194,6 @@
             box-shadow: inset -4px -4px 0px #dfe4ea;
         }
 
-        /* Ears */
         .cat-ear {
             position: absolute; top: -10px;
             width: 35px; height: 40px;
@@ -211,7 +209,6 @@
             border-radius: 30% 70% 30% 30%;
         }
 
-        /* Face Attributes */
         .cat-eye {
             position: absolute; top: 42px;
             width: 15px; height: 8px;
@@ -236,7 +233,6 @@
         .cat-blush.left { left: 15px; }
         .cat-blush.right { right: 15px; }
 
-        /* The Birthday Cake Layout */
         .cake-box {
             position: absolute; bottom: 15px; left: 50%;
             transform: translateX(-50%);
@@ -280,7 +276,6 @@
             100% { transform: scale(1.15) rotate(3deg); background: #ff7f50; box-shadow: 0 0 6px #ff7f50; }
         }
 
-        /* Cat Paws holding the cake */
         .cat-paw {
             position: absolute; bottom: 30px;
             width: 22px; height: 22px;
@@ -298,6 +293,7 @@
             box-shadow: 0 15px 35px rgba(255, 107, 139, 0.3);
             cursor: pointer; transition: transform 0.3s ease, opacity 0.5s ease;
             animation: float 3s ease-in-out infinite; z-index: 6;
+            -webkit-tap-highlight-color: transparent;
         }
 
         .envelope-wrapper::before {
@@ -468,3 +464,6 @@
         const CORRECT_PASSWORD = "1606";
         let currentInput = "";
         let isTransitioning = false;
+        let currentSlideIndex = 0;
+
+        const displayEl = document.getElementById("passwordDispl
