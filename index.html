@@ -4,26 +4,27 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Top Secret Access ✨</title>
-    <!-- Fonts: UI element styling & elegant handwriting for captions -->
     <link href="https://fonts.googleapis.com/css2?family=Caveat:wght=600;700&family=Fredoka:wght=400;600&display=swap" rel="stylesheet">
     <style>
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
+            -webkit-tap-highlight-color: transparent;
         }
 
         body {
             background: linear-gradient(135deg, #ffe5ec, #ffc2d1, #f0e6ff);
             background-size: 400% 400%;
             animation: gradientBG 15s ease infinite;
-            height: 100vh;
+            min-height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
-            overflow: hidden;
-            position: relative;
+            overflow-x: hidden;
             font-family: 'Fredoka', sans-serif;
+            position: relative;
+            padding: 20px;
         }
 
         @keyframes gradientBG {
@@ -32,34 +33,46 @@
             100% { background-position: 0% 50%; }
         }
 
-        /* --- GLOBAL SAFETY MECHANISM --- */
-        .hidden {
-            display: none !important;
-        }
-
-        /* --- GLOBAL PARTICLE EFFECT STYLES --- */
-        .click-heart {
+        /* --- IMMUNE HEART PARTICLE LAYER --- */
+        #heart-particle-space {
             position: fixed;
-            pointer-events: none !important;
-            z-index: 9999 !important;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            pointer-events: none;
+            z-index: 99999;
+        }
+
+        .click-heart {
+            position: absolute;
+            pointer-events: none;
             font-size: 1.6rem;
+            transform: translate(-50%, -50%);
             will-change: transform, opacity;
-            animation: flyUpAndFade 1.2s cubic-bezier(0.25, 1, 0.5, 1) forwards;
         }
 
-        @keyframes flyUpAndFade {
-            0% {
-                transform: translate(-50%, -50%) translateY(0) scale(0.6) rotate(0deg);
-                opacity: 1;
-            }
-            100% {
-                transform: translate(-50%, -50%) translateY(-140px) scale(1.4) rotate(var(--rot));
-                opacity: 0;
-            }
+        /* --- STABLE PAGE CONTROL GRID --- */
+        .page {
+            display: none; /* Inactive frameworks are totally decoupled */
+            width: 100%;
+            max-width: 380px;
+            justify-content: center;
+            align-items: center;
         }
 
-        /* --- STAGE 1: SYSTEM GATEWAY --- */
-        .login-card {
+        .page.active {
+            display: flex;
+            animation: cleanFade 0.4s ease-out forwards;
+        }
+
+        @keyframes cleanFade {
+            from { opacity: 0; transform: scale(0.96); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        /* --- MASTER CARD DESIGN --- */
+        .cute-card {
             background: rgba(255, 255, 255, 0.85);
             backdrop-filter: blur(10px);
             padding: 2.5rem 2rem;
@@ -68,20 +81,12 @@
             border: 4px solid #fff;
             text-align: center;
             width: 100%;
-            max-width: 380px;
-            z-index: 10;
-            transition: opacity 0.4s ease, transform 0.4s ease;
         }
 
-        .login-card.fade-out {
-            opacity: 0;
-            transform: scale(0.8);
-            pointer-events: none;
-        }
-
-        h1 { color: #ff6b8b; font-size: 1.8rem; margin-bottom: 0.5rem; }
+        h1, h2 { color: #ff6b8b; font-size: 1.8rem; margin-bottom: 0.5rem; }
         p { color: #7d7785; font-size: 0.95rem; margin-bottom: 1.5rem; }
 
+        /* --- STAGE 1: NUMPAD ENTRY --- */
         .display-container {
             background: #fff0f3;
             border: 2px dashed #ffb3c1;
@@ -97,281 +102,189 @@
             margin-bottom: 1.5rem;
         }
 
-        .numpad {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 12px;
-            justify-items: center;
-        }
+        .numpad { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; justify-items: center; }
 
         .num-btn {
-            width: 65px;
-            height: 65px;
-            border-radius: 50%;
-            border: none;
-            background: #fff;
-            color: #ff6b8b;
-            font-size: 1.5rem;
-            font-weight: 600;
-            cursor: pointer;
-            box-shadow: 0 4px 10px rgba(255, 182, 193, 0.4);
-            transition: all 0.2s ease;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            -webkit-tap-highlight-color: transparent;
+            width: 65px; height: 65px; border-radius: 50%; border: none; background: #fff; color: #ff6b8b;
+            font-size: 1.5rem; font-weight: 600; cursor: pointer; box-shadow: 0 4px 10px rgba(255, 182, 193, 0.4);
+            display: flex; justify-content: center; align-items: center; transition: background 0.1s;
         }
-
-        .num-btn:active { transform: scale(0.9); background: #ffb3c1; color: #fff; }
+        .num-btn:active { background: #ffb3c1; color: #fff; }
         .num-btn.action-btn { background: #ffe5ec; color: #ff477e; font-size: 1.2rem; }
+        
         .message { margin-top: 1rem; min-height: 24px; font-weight: 600; font-size: 0.9rem; }
         .error { color: #ff4d4d; }
         .success { color: #2ecc71; }
 
-        /* --- BASE STAGE CONTAINERS --- */
-        .stage-container {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            opacity: 0;
-            transform: scale(0.9);
-            transition: opacity 0.5s ease, transform 0.5s ease;
-            z-index: 5;
-            padding: 20px;
+        /* --- SYSTEM NAV BUTTON STYLES --- */
+        .action-transition-btn {
+            background: #ff477e; color: white; border: none; padding: 0.8rem 1.8rem;
+            font-size: 1.1rem; font-weight: 600; border-radius: 20px; cursor: pointer;
+            margin-top: 1.5rem; width: 100%; box-shadow: 0 5px 15px rgba(255, 71, 126, 0.3);
+            transition: transform 0.2s;
         }
+        .action-transition-btn:active { transform: scale(0.96); background: #ff6b8b; }
 
-        .stage-container.fade-in {
-            opacity: 1;
-            transform: scale(1);
+        /* --- STAGE 2: PURE CSS CAT ANIMATION --- */
+        .cat-animation-wrapper {
+            position: relative; width: 200px; height: 180px; margin: 0 auto 1rem auto;
+            animation: floatCat 3s ease-in-out infinite;
         }
+        @keyframes floatCat { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
 
-        /* --- STAGE 2: ENVELOPE & LETTER --- */
+        .cat-head {
+            position: absolute; bottom: 40px; left: 40px; width: 120px; height: 95px;
+            background: #f1f2f6; border-radius: 50% 50% 45% 45%; box-shadow: inset -4px -4px 0px #dfe4ea;
+        }
+        .cat-ear { position: absolute; top: -10px; width: 35px; height: 40px; background: #f1f2f6; border-radius: 30% 70% 30% 30%; }
+        .cat-ear.left { left: 10px; transform: rotate(-15deg); }
+        .cat-ear.right { right: 10px; transform: rotate(15deg) scaleX(-1); }
+        .cat-ear::after { content: ''; position: absolute; top: 8px; left: 7px; width: 20px; height: 25px; background: #ffb3c1; border-radius: 30% 70% 30% 30%; }
+        .cat-eye { position: absolute; top: 42px; width: 15px; height: 8px; border-bottom: 3px solid #57606f; border-radius: 0 0 15px 15px; }
+        .cat-eye.left { left: 25px; } .cat-eye.right { right: 25px; }
+        .cat-snout { position: absolute; top: 52px; left: 56px; width: 8px; height: 5px; background: #ff6b8b; border-radius: 50%; }
+        .cat-blush { position: absolute; top: 52px; width: 14px; height: 8px; background: rgba(255, 182, 193, 0.8); border-radius: 50%; }
+        .cat-blush.left { left: 15px; } .cat-blush.right { right: 15px; }
+
+        .cake-box {
+            position: absolute; bottom: 15px; left: 50%; transform: translateX(-50%);
+            width: 75px; height: 45px; background: #fff0f3; border: 2px solid #ffccd5;
+            border-radius: 8px 8px 4px 4px; z-index: 3;
+        }
+        .cake-cream { position: absolute; top: 0; left: 0; width: 100%; height: 12px; background: #ffb3c1; border-radius: 6px 6px 0 0; }
+        .cake-cream::after { content: '•••'; position: absolute; bottom: -8px; left: 4px; color: #ffb3c1; font-size: 1.2rem; letter-spacing: 6px; line-height: 10px; }
+        .cake-candle { position: absolute; top: -14px; left: 54%; transform: translateX(-50%); width: 6px; height: 16px; background: #ffe5ec; border-left: 2px solid #ff477e; }
+        .candle-flame { position: absolute; top: -10px; left: -1px; width: 8px; height: 11px; background: #ffa502; border-radius: 50% 50% 20% 20%; transform-origin: bottom center; animation: flicker 0.6s infinite alternate ease-in-out; }
+        @keyframes flicker { 0% { transform: scale(1) rotate(-2deg); background: #ffa502; } 100% { transform: scale(1.15) rotate(3deg); background: #ff7f50; box-shadow: 0 0 6px #ff7f50; } }
+        .cat-paw { position: absolute; bottom: 30px; width: 22px; height: 22px; background: #f1f2f6; border-radius: 50%; z-index: 4; }
+        .cat-paw.left { left: 42px; } .cat-paw.right { right: 42px; }
+
+        /* --- STAGE 3: ENVELOPE INTERFACE --- */
         .envelope-wrapper {
-            position: relative;
-            width: 300px;
-            height: 200px;
-            background-color: #ffb3c1;
-            border-radius: 0 0 15px 15px;
-            box-shadow: 0 15px 35px rgba(255, 107, 139, 0.3);
-            cursor: pointer;
-            transition: transform 0.3s ease, opacity 0.5s ease;
-            animation: float 3s ease-in-out infinite;
-            z-index: 6;
+            width: 300px; height: 200px; background-color: #ffb3c1; border-radius: 0 0 15px 15px;
+            box-shadow: 0 15px 35px rgba(255, 107, 139, 0.3); cursor: pointer;
+            position: relative; animation: float 3s ease-in-out infinite; margin: 0 auto;
         }
-
-        @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
-
         .envelope-wrapper::before {
             content: ''; position: absolute; top: 0; left: 0;
             border-left: 150px solid transparent; border-right: 150px solid transparent;
-            border-top: 110px solid #ffccd5; transform-origin: top;
-            transition: transform 0.5s ease, z-index 0.3s; z-index: 8;
+            border-top: 110px solid #ffccd5; transform-origin: top; transition: transform 0.4s ease; z-index: 2;
         }
-
-        .envelope-wrapper.open::before { transform: rotateX(180deg); z-index: 5; }
-
-        .heart-seal {
-            position: absolute; top: 40%; left: 50%; transform: translate(-50%, -50%);
-            font-size: 2.5rem; z-index: 9; transition: all 0.3s ease;
-        }
-        .envelope-wrapper.open .heart-seal { opacity: 0; transform: translate(-50%, -50%) scale(0); }
+        .envelope-wrapper.open::before { transform: rotateX(180deg); z-index: 1; }
+        .envelope-heart { position: absolute; top: 40%; left: 50%; transform: translate(-50%, -50%); font-size: 2.5rem; z-index: 3; transition: all 0.3s ease; }
+        .envelope-wrapper.open .envelope-heart { opacity: 0; transform: translate(-50%, -50%) scale(0); }
 
         .love-letter-card {
-            position: absolute;
-            background: #fffdf9;
-            width: 95%;
-            max-width: 400px;
-            max-height: 85vh;
-            border-radius: 25px;
-            padding: 2.5rem 2rem;
-            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.15);
-            border: 1px solid #ffe5ec;
-            opacity: 0;
-            transform: translateY(100px) scale(0.8);
-            transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
-            overflow-y: auto;
-            z-index: 15;
-            display: none;
+            background: #fffdf9; width: 100%; max-height: 85vh;
+            border-radius: 25px; padding: 2.5rem 2rem; box-shadow: 0 20px 50px rgba(0, 0, 0, 0.15);
+            border: 1px solid #ffe5ec; overflow-y: auto; display: none;
         }
-
-        .love-letter-card.reveal { display: block; opacity: 1; transform: translateY(0) scale(1); }
-        .love-letter-card.fade-out { opacity: 0; transform: scale(0.8); }
-
+        .love-letter-card.reveal { display: block; }
+        
         .letter-content { font-family: 'Caveat', cursive; font-size: 1.45rem; line-height: 1.8rem; color: #4a3b40; text-align: left; }
-        .letter-content p { font-family: 'Caveat', cursive; color: #4a3b40; margin-bottom: 1.2rem; font-size: 1.45rem; }
+        .letter-content p { font-family: 'Caveat', cursive; color: #4a3b40; margin-bottom: 1.2rem; }
         .letter-content .salutation { font-size: 1.8rem; font-weight: 700; color: #ff477e; margin-bottom: 1.5rem; }
         .letter-content .closing { margin-top: 2rem; font-weight: 700; color: #ff477e; margin-bottom: 0.2rem; }
         .letter-content .signature { font-size: 1.6rem; font-weight: 700; color: #7d7785; text-align: right; margin-top: 1rem; }
 
-        .action-transition-btn {
-            background: #ff477e;
-            color: white;
-            border: none;
-            padding: 0.8rem 1.8rem;
-            font-size: 1.1rem;
-            font-weight: 600;
-            border-radius: 20px;
-            cursor: pointer;
-            margin-top: 1.5rem;
-            width: 100%;
-            box-shadow: 0 5px 15px rgba(255, 71, 126, 0.3);
-            transition: all 0.3s ease;
-        }
-        .action-transition-btn:active { transform: scale(0.95); background: #ff6b8b; }
-
-        /* --- STAGE 3: POLAROID MEMORY VAULT --- */
-        .stage-three-layout {
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            width: 100%;
-            height: 100%;
-        }
-
-        .vault-title {
-            color: #ff477e;
-            font-size: 1.6rem;
-            margin-bottom: 1.5rem;
-            text-align: center;
-            text-shadow: 0 2px 4px rgba(0,0,0,0.05);
-        }
-
-        .polaroid-slider-box {
-            position: relative;
-            width: 100%;
-            max-width: 330px;
-            height: 410px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-
+        /* --- STAGE 4: PHOTO STACK VAULT --- */
+        .vault-title { color: #ff477e; font-size: 1.6rem; margin-bottom: 1.5rem; text-shadow: 0 2px 4px rgba(0,0,0,0.05); text-align: center; }
+        .polaroid-slider-box { position: relative; width: 100%; max-width: 320px; height: 400px; margin: 0 auto; display: flex; justify-content: center; align-items: center; }
+        
         .polaroid-card {
-            position: absolute;
-            background: white;
-            padding: 15px 15px 25px 15px;
-            box-shadow: 0 15px 30px rgba(0,0,0,0.12);
-            border-radius: 4px;
-            width: 100%;
-            height: 100%;
-            display: flex;
-            flex-direction: column;
-            opacity: 0;
-            transform: scale(0.8) rotate(5deg);
-            transition: all 0.5s ease-in-out;
-            pointer-events: none;
+            position: absolute; background: white; padding: 15px 15px 25px 15px;
+            box-shadow: 0 15px 30px rgba(0,0,0,0.12); border-radius: 4px;
+            width: 100%; height: 100%; display: flex; flex-direction: column;
+            opacity: 0; transform: scale(0.8) rotate(5deg); transition: all 0.4s ease-in-out; pointer-events: none;
         }
+        .polaroid-card.active { opacity: 1; transform: scale(1) rotate(-2deg); pointer-events: auto; }
+        .polaroid-img { width: 100%; height: 270px; object-fit: cover; border: 1px solid #f0f0f0; background: #ffe5ec; }
+        .polaroid-caption { font-family: 'Caveat', cursive; font-size: 1.35rem; line-height: 1.5rem; color: #4a3b40; text-align: center; margin-top: auto; min-height: 55px; display: flex; align-items: center; justify-content: center; }
 
-        .polaroid-card.active {
-            opacity: 1;
-            transform: scale(1) rotate(-2deg);
-            pointer-events: auto;
-        }
-
-        .polaroid-img {
-            width: 100%;
-            height: 280px;
-            object-fit: cover;
-            border: 1px solid #f0f0f0;
-            background: #ffe5ec;
-        }
-
-        .polaroid-caption {
-            font-family: 'Caveat', cursive;
-            font-size: 1.4rem;
-            line-height: 1.6rem;
-            color: #4a3b40;
-            text-align: center;
-            margin-top: auto;
-            min-height: 55px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .slider-controls {
-            display: flex;
-            gap: 25px;
-            margin-top: 2rem;
-            align-items: center;
-        }
-
+        .slider-controls { display: flex; gap: 25px; margin-top: 1.5rem; align-items: center; justify-content: center; }
         .control-btn {
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            border: none;
-            background: white;
-            color: #ff477e;
-            font-size: 1.2rem;
-            cursor: pointer;
-            display: flex;
-            justify-content: center;
-            align-items: center;
+            width: 50px; height: 50px; border-radius: 50%; border: none; background: white; color: #ff477e;
+            font-size: 1.2rem; cursor: pointer; display: flex; justify-content: center; align-items: center;
             box-shadow: 0 4px 10px rgba(255,107,139,0.2);
-            transition: all 0.2s ease;
-            -webkit-tap-highlight-color: transparent;
         }
-        .control-btn:active { transform: scale(0.9); background: #ffe5ec; }
-
         .counter-tracker { color: #7d7785; font-weight: 600; font-size: 1rem; }
     </style>
 </head>
 <body>
 
-    <!-- STAGE 1: SYSTEM GATEWAY -->
-    <div class="login-card" id="loginCard">
-        <h1>Hi Beautiful! ✨</h1>
-        <p>Enter the secret code to unlock your surprise:</p>
-        <div class="display-container" id="passwordDisplay"></div>
-        <div class="numpad">
-            <button class="num-btn" onclick="pressKey('1')">1</button>
-            <button class="num-btn" onclick="pressKey('2')">2</button>
-            <button class="num-btn" onclick="pressKey('3')">3</button>
-            <button class="num-btn" onclick="pressKey('4')">4</button>
-            <button class="num-btn" onclick="pressKey('5')">5</button>
-            <button class="num-btn" onclick="pressKey('6')">6</button>
-            <button class="num-btn" onclick="pressKey('7')">7</button>
-            <button class="num-btn" onclick="pressKey('8')">8</button>
-            <button class="num-btn" onclick="pressKey('9')">9</button>
-            <button class="num-btn action-btn" onclick="clearDisplay()">Clear</button>
-            <button class="num-btn" onclick="pressKey('0')">0</button>
-            <button class="num-btn action-btn" onclick="checkPassword()">Go</button>
+    <div id="heart-particle-space"></div>
+
+    <div class="page active" id="pageLock">
+        <div class="cute-card">
+            <h1>Hi Beautiful! ✨</h1>
+            <p>Enter the secret code to unlock your surprise:</p>
+            <div class="display-container" id="passwordDisplay"></div>
+            <div class="numpad">
+                <button class="num-btn" onclick="pressKey('1')">1</button>
+                <button class="num-btn" onclick="pressKey('2')">2</button>
+                <button class="num-btn" onclick="pressKey('3')">3</button>
+                <button class="num-btn" onclick="pressKey('4')">4</button>
+                <button class="num-btn" onclick="pressKey('5')">5</button>
+                <button class="num-btn" onclick="pressKey('6')">6</button>
+                <button class="num-btn" onclick="pressKey('7')">7</button>
+                <button class="num-btn" onclick="pressKey('8')">8</button>
+                <button class="num-btn" onclick="pressKey('9')">9</button>
+                <button class="num-btn action-btn" onclick="clearDisplay()">Clear</button>
+                <button class="num-btn" onclick="pressKey('0')">0</button>
+                <button class="num-btn action-btn" onclick="checkPassword()">Go</button>
+            </div>
+            <div class="message" id="msgDisplay"></div>
         </div>
-        <div class="message" id="msgDisplay"></div>
     </div>
 
-    <!-- STAGE 2: DIGITAL ENVELOPE PROTOCOL -->
-    <div class="stage-container hidden" id="stageTwo">
-        <div class="envelope-wrapper" id="envelope" onclick="openLetter()">
-            <div class="heart-seal">❤️</div>
+    <div class="page" id="pageBirthday">
+        <div class="cute-card">
+            <h2>Happy Birthday, Jhansi! 🎉</h2>
+            <div class="cat-animation-wrapper">
+                <div class="cat-ear left"></div>
+                <div class="cat-ear right"></div>
+                <div class="cat-head">
+                    <div class="cat-eye left"></div>
+                    <div class="cat-eye right"></div>
+                    <div class="cat-blush left"></div>
+                    <div class="cat-blush right"></div>
+                    <div class="cat-snout"></div>
+                </div>
+                <div class="cake-box">
+                    <div class="cake-cream"></div>
+                    <div class="cake-candle"><div class="candle-flame"></div></div>
+                </div>
+                <div class="cat-paw left"></div><div class="cat-paw right"></div>
+            </div>
+            <button class="action-transition-btn" onclick="switchPage('pageEnvelope')">Open Your Gift ➔</button>
         </div>
+    </div>
 
-        <div class="love-letter-card" id="loveLetter">
-            <div class="letter-content">
-                <p class="salutation">Happy Birthday Jhansi,</p>
-                <p>I don’t think I ever loved anything as deeply and uncontrollably as I love you.</p>
-                <p>It’s not gentle or simple anymore — it’s something that stays with me all the time. You’re in my thoughts when I’m quiet, in my breath when I miss you, and in every part of me that has learned what attachment really feels like.</p>
-                <p>There’s a pull toward you that I can’t explain. Not just love… something stronger, something that feels like it owns me just as much as I belong to it.</p>
-                <p>Today, I just want you to feel special, wanted, and completely mine in the way two hearts belong to each other when they’ve chosen each other fully.</p>
-                <p class="closing">Happy Birthday, Jhansi.</p>
-                <p>I’m yours in a way I can’t undo.</p>
-                <p class="signature">— By Namann Bissoyi</p>
-                
-                <button class="action-transition-btn" onclick="deployVault()">Our Memories ➔</button>
+    <div class="page" id="pageEnvelope">
+        <div style="width: 100%;">
+            <div class="envelope-wrapper" id="envelope" onclick="openEnvelope()">
+                <div class="envelope-heart">❤️</div>
+            </div>
+
+            <div class="love-letter-card" id="loveLetter">
+                <div class="letter-content">
+                    <p class="salutation">Happy Birthday Jhansi,</p>
+                    <p>I don’t think I ever loved anything as deeply and uncontrollably as I love you.</p>
+                    <p>It’s not gentle or simple anymore — it’s something that stays with me all the time. You’re in my thoughts when I’m quiet, in my breath when I miss you, and in every part of me that has learned what attachment really feels like.</p>
+                    <p>There’s a pull toward you that I can’t explain. Not just love… something stronger, something that feels like it owns me just as much as I belong to it.</p>
+                    <p>Today, I just want you to feel special, wanted, and completely mine in the way two hearts belong to each other when they’ve chosen each other fully.</p>
+                    <p class="closing">Happy Birthday, Jhansi.</p>
+                    <p>I’m yours in a way I can’t undo.</p>
+                    <p class="signature">— By Namann Bissoyi</p>
+                    <button class="action-transition-btn" onclick="switchPage('pageVault')">Our Memories ➔</button>
+                </div>
             </div>
         </div>
     </div>
 
-    <!-- STAGE 3: INTERACTIVE MEMORY VAULT -->
-    <div class="stage-container hidden" id="stageThree">
-        <div class="stage-three-layout">
+    <div class="page" id="pageVault">
+        <div style="width: 100%;">
             <h2 class="vault-title">Some of My Favorite Moments 💖</h2>
-            
             <div class="polaroid-slider-box">
                 <div class="polaroid-card active">
                     <img src="photo1.jpg" alt="Memory 1" class="polaroid-img">
@@ -390,7 +303,6 @@
                     <div class="polaroid-caption">To the one who makes our home feel like heaven. Happy Birthday, my love.</div>
                 </div>
             </div>
-
             <div class="slider-controls">
                 <button class="control-btn" onclick="moveSlide(-1)">◀</button>
                 <span class="counter-tracker" id="slideTracker">1 / 4</span>
@@ -402,61 +314,67 @@
     <script>
         const CORRECT_PASSWORD = "1606";
         let currentInput = "";
-        let isTransitioning = false;
         let currentSlideIndex = 0;
 
         const displayEl = document.getElementById("passwordDisplay");
         const msgEl = document.getElementById("msgDisplay");
-        const loginCard = document.getElementById("loginCard");
-        const stageTwo = document.getElementById("stageTwo");
-        const envelope = document.getElementById("envelope");
-        const loveLetter = document.getElementById("loveLetter");
-        const stageThree = document.getElementById("stageThree");
         const cards = document.querySelectorAll(".polaroid-card");
         const tracker = document.getElementById("slideTracker");
 
-        /* --- GLOBAL TOUCH/CLICK HEART ENGINE --- */
-        const heartPool = ['❤️', '💖', '💕']; // Sparkle emoji officially purged
-        document.addEventListener('click', function(e) {
+        /* --- ASYNCHRONOUS FLOATING HEART ENGINE --- */
+        const heartPool = ['❤️', '💖', '💕'];
+        document.addEventListener('pointerdown', function(e) {
+            const container = document.getElementById('heart-particle-space');
+            if (!container) return;
+
             const heart = document.createElement('div');
             heart.className = 'click-heart';
             heart.textContent = heartPool[Math.floor(Math.random() * heartPool.length)];
+            heart.style.left = e.clientX + 'px';
+            heart.style.top = e.clientY + 'px';
             
-            const randomRotation = Math.floor(Math.random() * 90) - 45;
-            heart.style.setProperty('--rot', `${randomRotation}deg`);
+            const randomRot = Math.floor(Math.random() * 80) - 40;
+            heart.style.transform = `translate(-50%, -50%) scale(0.6) rotate(${randomRot}deg)`;
             
-            heart.style.left = `${e.clientX}px`;
-            heart.style.top = `${e.clientY}px`;
-            
-            document.body.appendChild(heart);
-            setTimeout(() => { heart.remove(); }, 1200);
+            container.appendChild(heart);
+
+            // Handing presentation rendering over to the browser background layer sequentially
+            requestAnimationFrame(() => {
+                heart.style.transition = 'transform 1.2s cubic-bezier(0.25, 1, 0.5, 1), opacity 1.2s ease';
+                heart.style.transform = `translate(-50%, -50%) translateY(-150px) scale(1.4) rotate(${randomRot + 20}deg)`;
+                heart.style.opacity = '0';
+            });
+
+            setTimeout(() => { heart.remove(); }, 1250);
         });
+
+        /* --- SINGLE PAGE STATE CONTOLLER --- */
+        function switchPage(toPageId) {
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            const target = document.getElementById(toPageId);
+            if (target) target.classList.add('active');
+        }
 
         function updateDisplay() { displayEl.textContent = "•".repeat(currentInput.length); }
 
         function pressKey(num) {
-            if (isTransitioning) return;
-            if (currentInput.length < 4) { currentInput += num; msgEl.textContent = ""; updateDisplay(); }
+            if (currentInput.length < 4) {
+                currentInput += num;
+                msgEl.textContent = ""; 
+                updateDisplay();
+            }
             if (currentInput.length === 4) { checkPassword(); }
         }
 
-        function clearDisplay() {
-            if (isTransitioning) return;
-            currentInput = ""; msgEl.textContent = ""; updateDisplay();
-        }
+        function clearDisplay() { currentInput = ""; msgEl.textContent = ""; updateDisplay(); }
 
         function checkPassword() {
-            if (isTransitioning) return;
             if (currentInput === CORRECT_PASSWORD) {
-                isTransitioning = true;
                 msgEl.className = "message success";
                 msgEl.textContent = "Access Granted! 💖";
-                loginCard.classList.add("fade-out");
-                
-                setTimeout(() => {
-                    loginCard.classList.add("hidden");
-                    stageTwo.classList.remove("hidden");
-                    setTimeout(() => { stageTwo.classList.add("fade-in"); }, 50);
+                setTimeout(() => { 
+                    clearDisplay();
+                    switchPage('pageBirthday'); 
                 }, 400);
             } else {
                 msgEl.className = "message error";
@@ -465,34 +383,9 @@
             }
         }
 
-        function openLetter() {
-            envelope.classList.add("open");
-            setTimeout(() => { 
-                envelope.classList.add("hidden"); 
-                loveLetter.classList.add("reveal"); 
-            }, 500);
-        }
-
-        function deployVault() {
-            loveLetter.classList.add("fade-out");
-            stageTwo.classList.remove("fade-in");
-            
+        function openEnvelope() {
+            const env = document.getElementById("envelope");
+            env.classList.add("open");
             setTimeout(() => {
-                stageTwo.classList.add("hidden");
-                stageThree.classList.remove("hidden");
-                setTimeout(() => { stageThree.classList.add("fade-in"); }, 50);
-            }, 500);
-        }
-
-        function moveSlide(direction) {
-            cards[currentSlideIndex].classList.remove("active");
-            currentSlideIndex += direction;
-            if (currentSlideIndex >= cards.length) { currentSlideIndex = 0; }
-            if (currentSlideIndex < 0) { currentSlideIndex = cards.length - 1; }
-            cards[currentSlideIndex].classList.add("active");
-            tracker.textContent = `${currentSlideIndex + 1} / ${cards.length}`;
-        }
-    </script>
-</body>
-</html>
-
+                env.style.display = "none";
+                document.getElementById("loveLet
