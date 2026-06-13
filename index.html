@@ -192,6 +192,13 @@
             animation: textShine 3s linear infinite;
         }
 
+        .real-emoji {
+            -webkit-text-fill-color: initial !important;
+            -webkit-background-clip: initial !important;
+            background: none !important;
+            display: inline-block;
+        }
+
         @keyframes textShine { to { background-position: 200% center; } }
         @keyframes heartbeatGlow {
             0% { transform: scale(1); text-shadow: 0 2px 10px rgba(255,71,126,0.1); }
@@ -200,6 +207,8 @@
     </style>
 </head>
 <body>
+
+    <audio id="birthday-track" src="song.mp3" loop></audio>
 
     <div class="app-page active" id="page-lock">
         <div class="cute-card">
@@ -234,7 +243,7 @@
                 <div class="letter-content">
                     <p class="salutation">Happy Birthday Jhansi,</p>
                     <p>I don’t think I ever loved anything as deeply and uncontrollably as I love you.</p>
-                    <p>It’s not gentle or simple anymore — it’s something that stays with me all the time. You’re in my thoughts when I’m quiet, in my breath when I miss you, and in every part of me that has learned what attachment really feels like.</p>
+                    <p>IT’s not gentle or simple anymore — it’s something that stays with me all the time. You’re in my thoughts when I’m quiet, in my breath when I miss you, and in every part of me that has learned what attachment really feels like.</p>
                     <p>There’s a pull toward you that I can’t explain. Not just love… something stronger, something that feels like it owns me just as much as I belong to it.</p>
                     <p>Today, I just want you to feel special, wanted, and completely mine in the way two hearts belong to each other when they’ve chosen each other fully.</p>
                     <p class="closing">Happy Birthday, Jhansi.</p>
@@ -280,7 +289,7 @@
         <div class="cute-card">
             <h1 class="animated-grand-title">
                 Happy Birthday to you
-                <span class="shimmer-name">Jhansi Rani Mishra 👑💖</span>
+                <span class="shimmer-name">Jhansi Rani Mishra <span class="real-emoji">👑💖</span></span>
             </h1>
         </div>
     </div>
@@ -294,11 +303,11 @@
         const msgEl = document.getElementById("msgDisplay");
         const slides = document.querySelectorAll(".polaroid-card");
         const trackerEl = document.getElementById("slideTracker");
+        const audioTrack = document.getElementById("birthday-track");
 
         /* --- BULLETPROOF ASYNCHRONOUS HEART PARTICLES --- */
         const heartPool = ['❤️', '💖', '💕'];
         document.addEventListener('click', function(e) {
-            // Evaluated via timeout to guarantee it NEVER blocks button selection events
             setTimeout(() => {
                 const heart = document.createElement('div');
                 heart.className = 'click-heart';
@@ -339,6 +348,14 @@
             if (currentInput === PIN) {
                 msgEl.className = "message success";
                 msgEl.textContent = "Access Granted! 💖";
+                
+                // AUDIO INITIALIZATION SEQUENCE (Fires within user tap window to avoid browser blocks)
+                if (audioTrack) {
+                    audioTrack.play().catch(err => {
+                        console.log("Audio contextual trigger paused or delayed:", err);
+                    });
+                }
+
                 setTimeout(() => { 
                     clearDisplay();
                     navigateTo('page-envelope'); 
@@ -378,4 +395,3 @@
     </script>
 </body>
 </html>
-
