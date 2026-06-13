@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Top Secret Access ✨</title>
-    <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&family=Fredoka:wght@400;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Caveat:wght=600;700&family=Fredoka:wght=400;600&display=swap" rel="stylesheet">
     <style>
         * {
             box-sizing: border-box;
@@ -65,6 +65,20 @@
         @keyframes floatUpAndAway {
             0% { transform: translate(-50%, -50%) scale(0.6); opacity: 1; }
             100% { transform: translate(-50%, -50%) translateY(-140px) scale(1.4) rotate(var(--r)); opacity: 0; }
+        }
+
+        /* --- IMMUNE CONFETTI PARTICLES --- */
+        .confetti-piece {
+            position: fixed;
+            pointer-events: none;
+            z-index: 99998;
+            will-change: transform, opacity;
+            animation: fallConfetti 3.5s linear forwards;
+        }
+
+        @keyframes fallConfetti {
+            0% { transform: translateY(-50px) translateX(0) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(105vh) translateX(var(--x-drift)) rotate(var(--r-drift)); opacity: 0; }
         }
 
         /* --- THE ORIGINAL PERFECT CARD AESTHETIC --- */
@@ -190,6 +204,7 @@
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             animation: textShine 3s linear infinite;
+            margin-bottom: 1rem;
         }
 
         .real-emoji {
@@ -197,6 +212,29 @@
             -webkit-background-clip: initial !important;
             background: none !important;
             display: inline-block;
+        }
+
+        /* Compliment Output Subcard Layout */
+        .compliment-output-box {
+            min-height: 70px;
+            margin-top: 1.5rem;
+            padding: 12px;
+            background: #fff0f3;
+            border: 2px dashed #ffccd5;
+            border-radius: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: 'Caveat', cursive;
+            font-size: 1.5rem;
+            line-height: 1.8rem;
+            color: #4a3b40;
+            animation: textBubblePop 0.3s ease-out forwards;
+        }
+
+        @keyframes textBubblePop {
+            0% { transform: scale(0.9); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
         }
 
         @keyframes textShine { to { background-position: 200% center; } }
@@ -243,7 +281,7 @@
                 <div class="letter-content">
                     <p class="salutation">Happy Birthday Jhansi,</p>
                     <p>I don’t think I ever loved anything as deeply and uncontrollably as I love you.</p>
-                    <p>IT’s not gentle or simple anymore — it’s something that stays with me all the time. You’re in my thoughts when I’m quiet, in my breath when I miss you, and in every part of me that has learned what attachment really feels like.</p>
+                    <p>It’s not gentle or simple anymore — it’s something that stays with me all the time. You’re in my thoughts when I’m quiet, in my breath when I miss you, and in every part of me that has learned what attachment really feels like.</p>
                     <p>There’s a pull toward you that I can’t explain. Not just love… something stronger, something that feels like it owns me just as much as I belong to it.</p>
                     <p>Today, I just want you to feel special, wanted, and completely mine in the way two hearts belong to each other when they’ve chosen each other fully.</p>
                     <p class="closing">Happy Birthday, Jhansi.</p>
@@ -261,7 +299,7 @@
             <div class="polaroid-slider-box">
                 <div class="polaroid-card active">
                     <img src="photo1.jpg" alt="Memory 1" class="polaroid-img">
-                    <div class="polaroid-caption">My favorite view in the entire world. Yes, even when you're giving me 'the look.' 😂</div>
+                    <div class="polaroid-caption">My favorite view in the entire world. Yes, even when you're giving me 'the look.'</div>
                 </div>
                 <div class="polaroid-card">
                     <img src="photo2.jpg" alt="Memory 2" class="polaroid-img">
@@ -281,7 +319,7 @@
                 <span class="counter-tracker" id="slideTracker">1 / 4</span>
                 <button class="control-btn" onclick="moveSlide(1)">▶</button>
             </div>
-            <button class="action-transition-btn" id="finale-trigger-btn" onclick="navigateTo('page-finale')" style="display: none; margin-top: 1.5rem;">Final Surprise ➔</button>
+            <button class="action-transition-btn" id="finale-trigger-btn" onclick="triggerGrandFinale()" style="display: none; margin-top: 1.5rem;">Final Surprise ➔</button>
         </div>
     </div>
 
@@ -291,6 +329,12 @@
                 Happy Birthday to you
                 <span class="shimmer-name">Jhansi Rani Mishra <span class="real-emoji">👑💖</span></span>
             </h1>
+            
+            <div class="compliment-output-box" id="complimentDisplayText">
+                Tap the button below for a little reminder... ✨
+            </div>
+
+            <button class="action-transition-btn" onclick="fireComplimentRemixer()">Tap for a Reminder ❤️</button>
         </div>
     </div>
 
@@ -306,7 +350,7 @@
         const audioTrack = document.getElementById("birthday-track");
 
         /* --- BULLETPROOF ASYNCHRONOUS HEART PARTICLES --- */
-        const heartPool = ['❤️', '💖', '💕'];
+        const heartPool = ['❤️', '💖', '💕', '💗'];
         document.addEventListener('click', function(e) {
             setTimeout(() => {
                 const heart = document.createElement('div');
@@ -323,75 +367,50 @@
             }, 0);
         });
 
-        /* --- NATIVE FLUID SWITCHING ROUTINE --- */
-        function navigateTo(targetPageId) {
-            document.querySelectorAll('.app-page').forEach(page => page.classList.remove('active'));
-            const target = document.getElementById(targetPageId);
-            if (target) target.classList.add('active');
-        }
-
-        function updateDisplay() { displayEl.textContent = "•".repeat(currentInput.length); }
-        function clearDisplay() { currentInput = ""; msgEl.textContent = ""; updateDisplay(); }
-
-        function pressKey(num) {
-            if (currentInput.length < 4) {
-                currentInput += num;
-                msgEl.textContent = ""; 
-                updateDisplay();
-            }
-            if (currentInput.length === 4) {
-                setTimeout(checkPassword, 200);
-            }
-        }
-
-        function checkPassword() {
-            if (currentInput === PIN) {
-                msgEl.className = "message success";
-                msgEl.textContent = "Access Granted! 💖";
+        /* --- THE INLINE NATIVE CONFETTI BURST ENGINE --- */
+        const confettiColors = ['#ff477e', '#ff85a2', '#ffccd5', '#ff9999', '#ffc2d1', '#f0e6ff', '#fff'];
+        function runConfettiExplosion() {
+            for (let i = 0; i < 100; i++) {
+                const confetti = document.createElement('div');
+                confetti.className = 'confetti-piece';
                 
-                // AUDIO INITIALIZATION SEQUENCE (Fires within user tap window to avoid browser blocks)
-                if (audioTrack) {
-                    audioTrack.play().catch(err => {
-                        console.log("Audio contextual trigger paused or delayed:", err);
-                    });
-                }
-
-                setTimeout(() => { 
-                    clearDisplay();
-                    navigateTo('page-envelope'); 
-                }, 400);
-            } else {
-                msgEl.className = "message error";
-                msgEl.textContent = "Incorrect code, try again princess! 💕";
-                currentInput = ""; updateDisplay();
+                // Random configuration profiling
+                confetti.style.width = Math.floor(Math.random() * 10) + 8 + 'px';
+                confetti.style.height = Math.floor(Math.random() * 12) + 8 + 'px';
+                confetti.style.backgroundColor = confettiColors[Math.floor(Math.random() * confettiColors.length)];
+                confetti.style.borderRadius = Math.random() > 0.5 ? '50%' : '2px';
+                
+                // Horizon positioning spread across device width
+                confetti.style.left = Math.random() * 100 + 'vw';
+                confetti.style.top = '-20px';
+                
+                // Vector transformations
+                const driftX = Math.floor(Math.random() * 200) - 100 + 'px';
+                const driftRot = Math.floor(Math.random() * 360) + 360 + 'deg';
+                confetti.style.setProperty('--x-drift', driftX);
+                confetti.style.setProperty('--r-drift', driftRot);
+                
+                // Timings array staggered values
+                confetti.style.animationDelay = Math.random() * 1.5 + 's';
+                
+                document.body.appendChild(confetti);
+                setTimeout(() => { confetti.remove(); }, 5000);
             }
         }
 
-        function openEnvelope() {
-            const env = document.getElementById("envelope-body");
-            env.classList.add("open");
-            setTimeout(() => {
-                env.style.display = "none";
-                document.getElementById("loveLetter").classList.add("reveal");
-            }, 500);
-        }
+        /* --- COMPLIMENT ROTATION VAULT --- */
+        const complimentVault = [
+            "You have the most beautiful smile in the entire universe. ❤️",
+            "My life became infinitely brighter the day you walked into it. ✨",
+            "You are my favorite person, my safest home, and my greatest adventure. 🗺️",
+            "Still completely obsessed with you, every single single day. 💕",
+            "You are incredibly strong, brilliant, and breathtakingly gorgeous. 👑",
+            "My mama you are incredible and your boobs also. 🫣",
+            "You make even the most ordinary moments feel completely magical.",
+            "No matter where life takes us, my heart belongs completely to you.",
+            "You are my permanent beautiful plus-one in this lifetime. 💖",
+            "I am so incredibly proud of who you are. Happy Birthday, my love! 🎉"
+        ];
+        let lastIndex = -1;
 
-        function moveSlide(direction) {
-            slides[currentSlideIndex].classList.remove("active");
-            currentSlideIndex += direction;
-            if (currentSlideIndex >= slides.length) { currentSlideIndex = 0; }
-            if (currentSlideIndex < 0) { currentSlideIndex = slides.length - 1; }
-            slides[currentSlideIndex].classList.add("active");
-            trackerEl.textContent = `${currentSlideIndex + 1} / ${slides.length}`;
-
-            // Unlocks finale link only upon viewing the final image threshold
-            const finaleBtn = document.getElementById("finale-trigger-btn");
-            if (currentSlideIndex === slides.length - 1) {
-                finaleBtn.style.display = "block";
-            } else {
-                finaleBtn.style.display = "none";
-            }
-        }
-    </script>
-</body>
-</html>
+        function fireCompl
